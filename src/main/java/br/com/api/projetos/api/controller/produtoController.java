@@ -29,11 +29,18 @@ public class produtoController {
 
     @GetMapping
     @ResponseBody
-    public Iterable<Produto> listar(@RequestParam(name = "sortBy" , required=false) String sort){;
-        if (sort != null && (sort.equals("valor") || sort.equals("nome"))){
-            return produtoService.listarOrdenador(sort);
+    public Iterable<Produto> listar(@RequestParam(name = "sortBy" , required=false) String sort
+    , @RequestParam(name = "page") String page)
+    {
+        try {
+            int pageParse = Integer.parseInt(page);
+            if (sort != null && (sort.equals("valor") || sort.equals("nome"))){
+                return produtoService.listarOrdenador(sort, pageParse);
+            }
+            return produtoService.listar(pageParse);
+        }catch(Exception e){
+            return produtoService.listar(0);
         }
-        return produtoService.listar();
     }
 
     @PostMapping

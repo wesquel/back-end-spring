@@ -1,6 +1,8 @@
 package br.com.api.projetos.api.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +21,15 @@ public class ProdutoService {
     @Autowired
     Response response;
 
-    public Iterable<Produto> listar(){
-        return produtoRepository.findAll();
+    public Iterable<Produto> listar(int page){
+        System.out.println(page);
+        Pageable pageCount = PageRequest.of(page, 5);
+        return produtoRepository.findAll(pageCount);
     }
 
-    public Iterable<Produto> listarOrdenador(String type){
-        return produtoRepository.findAll(Sort.by(type));
+    public Iterable<Produto> listarOrdenador(String type, int page){
+        Pageable pageCount = PageRequest.of(page, 5, Sort.by(type));
+        return produtoRepository.findAll(pageCount);
     }
 
     public ResponseEntity<?> cadastrarAlterar(Produto produto, String acao){
